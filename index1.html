@@ -34,6 +34,15 @@
         <button onclick="clickedbtn()" class="fas fa-bars" id="menu"></button>
         <button onclick="clickedcross()" class="fas fa-times" id="menus"></button>
 
+        <div class="magic-wallet">
+            <p id="magic-wallet-info"></p>
+        </div>
+        <script>
+            // Call the function when the page loads
+            window.onload = function () {
+                displayMagicWallet();
+            };
+        </script>
         <div class="links" id="linkss">
             <div class="collection">
                 <div class="button">
@@ -49,29 +58,29 @@
             <div class="top">
                 <div class="image">
                     <img id="artistImage" src="./assets/overview.png" alt="">
-                    
+
                 </div>
                 <div class="content">
                     <div class="button">
                         <a href="./index2.html" class="btn">video</a>
                         <a href="./index3.html" class="btn">Art</a>
                     </div>
-                    
+
                     <div class=" content-details">
 
 
                         <h1 id="titl"></h1>
                         <h2 id="artis"></h2>
-                       
+
                         <div class=" content-details" id="singleSong">
                             <div class="overview" style="margin-top: 10%;">
                                 <h1>Use this space to give informations</h1>
                                 <h1>We need to fill the space that stays blank untill an user selects an album</h1>
                                 <h1>This space can be used to present the way the project workss</h1>
-    
+
                             </div>
 
-                       </div> 
+                        </div>
 
                     </div>
                 </div>
@@ -171,10 +180,49 @@
         let isRandom = false;
         let updateTimer;
 
-        
+
 
 
     </script>
+    <!-- Add Magic SDK Script -->
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script src="web3scripts.js"></script>
+
+    <script>
+        // Function to display Magic Wallet information
+        async function displayMagicWallet() {
+            try {
+                // Initialize Magic with your public API key
+                const magic = new Magic('pk_live_DFF5857B999E55FE');
+
+                // Check if the user is logged in
+                const isLoggedIn = await magic.user.isLoggedIn();
+
+                // Get the user's email
+                const userEmail = await magic.user.getMetadata();
+
+                // Check if the user has a connected wallet
+                const hasConnectedWallet = await magic.ethereum.isMagicEnabled();
+
+                // Display Magic Wallet information on the page
+                const walletInfoElement = document.getElementById('magic-wallet-info');
+                if (isLoggedIn) {
+                    if (hasConnectedWallet) {
+                        walletInfoElement.innerHTML = `Logged in as: ${userEmail} | Magic Wallet connected`;
+                    } else {
+                        walletInfoElement.innerHTML = `Logged in as: ${userEmail} | Magic Wallet not connected`;
+                    }
+                } else {
+                    walletInfoElement.innerHTML = 'Not logged in';
+                }
+            } catch (error) {
+                console.error('Error displaying Magic Wallet information:', error);
+            }
+        }
+    </script>
+
+
+
 </body>
 
 </html>

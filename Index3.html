@@ -21,9 +21,17 @@
         <button class="hide" onclick="handlediv()">
             <i class="fa-sharp fa-solid fa-caret-down"></i>
         </button>
-
+        <div class="magic-wallet">
+            <p id="magic-wallet-info"></p>
+        </div>
+        <script>
+            // Call the function when the page loads
+            window.onload = function () {
+                displayMagicWallet();
+            };
+        </script>
         <button class="collector" onclick="handlebtn()">Collections</button>
-       
+
 
         <button onclick="clickedbtn()" class="fas fa-bars" id="menu"></button>
         <button onclick="clickedcross()" class="fas fa-times" id="menus"></button>
@@ -42,19 +50,20 @@
                     <a>Manson's Medicine</a>
                     <a>Trey Bake</a>
                     <a>The Sailor's Taylor</a>
-                    <a style="font-size: 1.5rem; color: white; background: black; border: none; padding: 1rem;" href="./index1.html">Back to home</a>
+                    <a style="font-size: 1.5rem; color: white; background: black; border: none; padding: 1rem;"
+                        href="./index1.html">Back to home</a>
 
                 </div>
             </div>
 
         </div>
         <div class="details">
-            
+
             <div class="top">
                 <div class="image">
                     <img src="./image/faded.png" alt="">
                 </div>
-                
+
             </div>
         </div>
 
@@ -229,7 +238,7 @@
             menu.style = 'opacity:1'
             cross.style = 'opacity:0'
         }
-        
+
         function reset() {
             curr_time.textContent = "00:00";
             total_duration.textContent = "00:00";
@@ -321,6 +330,43 @@
 
 
     </script>
+    <!-- Add Magic SDK Script -->
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script src="web3scripts.js"></script>
+
+    <script>
+        // Function to display Magic Wallet information
+        async function displayMagicWallet() {
+            try {
+                // Initialize Magic with your public API key
+                const magic = new Magic('pk_live_DFF5857B999E55FE');
+
+                // Check if the user is logged in
+                const isLoggedIn = await magic.user.isLoggedIn();
+
+                // Get the user's email
+                const userEmail = await magic.user.getMetadata();
+
+                // Check if the user has a connected wallet
+                const hasConnectedWallet = await magic.ethereum.isMagicEnabled();
+
+                // Display Magic Wallet information on the page
+                const walletInfoElement = document.getElementById('magic-wallet-info');
+                if (isLoggedIn) {
+                    if (hasConnectedWallet) {
+                        walletInfoElement.innerHTML = `Logged in as: ${userEmail} | Magic Wallet connected`;
+                    } else {
+                        walletInfoElement.innerHTML = `Logged in as: ${userEmail} | Magic Wallet not connected`;
+                    }
+                } else {
+                    walletInfoElement.innerHTML = 'Not logged in';
+                }
+            } catch (error) {
+                console.error('Error displaying Magic Wallet information:', error);
+            }
+        }
+    </script>
+
 </body>
 
 </html>
