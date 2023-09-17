@@ -49,6 +49,9 @@
                 // Handle successful authentication here
                 // You can also redirect the user to a dashboard or perform other actions
                 console.log('User is authenticated with Magic Link');
+
+                // Redirect the user to index1.html
+                window.location.href = 'index1.html';
             } catch (error) {
                 console.error('Error connecting wallet:', error);
             }
