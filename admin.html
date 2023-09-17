@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+        <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<title>Page Title</title>
+</head>
+<body onload="connect()">
+
+
+<h1>FLIP STATE</h1>
+<button onclick="flipState()">Flip State</button>
+
+<div>
+    <h1>ADD ALBUM</h1>
+    <input id="price" placeholder="Price" type="number" step=".01">
+    <input id="title" placeholder="Title" type="text">
+    <input id="artist" placeholder="Artist" type="text">
+    <input id="image" placeholder="Image" type="text">
+    <input id="song" placeholder="Songs" type="number">
+    <input id="video" placeholder="Video" type="number">
+    <input id="art" placeholder="Art" type="number">
+    <input id="desc" placeholder="Descr" type="text">
+    <button onclick="addAlbum()">Add Album</button>
+</div>
+
+
+<div>
+<h1>SET SONG NAMES</h1>
+<input type="number" placeholder="How many Songs?" id="songsN">
+<button onclick="getNameInput()">Generate inputs</button>
+</div>
+
+<div id="input"></div>
+
+<div>
+    <h1>WITHDRAW</h1>
+    <button onclick="withdraw()">Withdraw</button>
+</div>
+
+
+
+<script>
+
+const contractAddress = "0xade928aa806021119Fb204367B30E53b7E44e98E";
+            
+            
+var abi = JSON.parse('[{"inputs":[{"internalType":"uint256","name":"_price","type":"uint256"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_artist","type":"string"},{"internalType":"string","name":"_img","type":"string"},{"internalType":"uint256","name":"_songs","type":"uint256"},{"internalType":"uint256","name":"_video","type":"uint256"},{"internalType":"uint256","name":"_art","type":"uint256"},{"internalType":"string","name":"_desc","type":"string"}],"name":"addAlbum","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"operator","type":"address"}],"name":"OperatorNotAllowed","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"flipSaleState","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"payable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_baseUri","type":"string"}],"name":"setBaseUri","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string[]","name":"_names","type":"string[]"},{"internalType":"uint256","name":"_albumID","type":"uint256"}],"name":"setSongName","outputs":[],"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawAll","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"_album","outputs":[{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"artist","type":"string"},{"internalType":"string","name":"img","type":"string"},{"internalType":"uint256","name":"songs","type":"uint256"},{"internalType":"uint256","name":"video","type":"uint256"},{"internalType":"uint256","name":"art","type":"uint256"},{"internalType":"string","name":"desc","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"_nftAllowsAlbum","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"_songsToNames","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseExtension","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseUri","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_albumID","type":"uint256"}],"name":"canAccess","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAlbums","outputs":[{"components":[{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"artist","type":"string"},{"internalType":"string","name":"img","type":"string"},{"internalType":"uint256","name":"songs","type":"uint256"},{"internalType":"uint256","name":"video","type":"uint256"},{"internalType":"uint256","name":"art","type":"uint256"},{"internalType":"string","name":"desc","type":"string"}],"internalType":"struct NFT.Album[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_albumID","type":"uint256"}],"name":"getNames","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isSaleActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_MINT_PER_TX","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_TOKENS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalAlbums","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]');
+           
+        
+ var accounts = null;
+ var provider = null;
+ var nftContract = null; 
+ var signer = null;
+ var inputs = 0;
+
+
+
+
+    async function connect() {
+    if(window.ethereum) {
+        if(window.ethereum.isMetaMask){
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    /*
+        if (await provider.getNetwork() != ethers.providers.getNetwork(1)) {
+            await provider.send('wallet_switchEthereumChain', [{ chainId: "0x1" }]);
+            }
+
+        */
+    accounts = await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    myContract = new ethers.Contract(contractAddress, abi, signer);
+    var owner = await myContract.owner();
+    if (owner != ethers.utils.getAddress(accounts[0])){
+        //location.replace("http://127.0.0.1:5500/mint.html");
+        console.log(owner);
+        console.log(ethers.utils.getAddress(accounts[0]));
+    }} else {
+        location.replace("https://metamask.io/download/");
+    }} else {
+        location.replace("https://metamask.io/download/");
+    }}
+
+    async function flipState() {
+        try{
+            await myContract.flipSaleState();
+            alert("Success!");
+        } catch(err){
+            alert(err.data.message);
+        }
+        
+    }
+
+    function getNameInput() {
+
+
+
+        var songs = document.getElementById("songsN").value;
+        var cont = document.getElementById("input");
+        inputs = songs;
+
+
+			while (cont.hasChildNodes()) {
+  			cont.removeChild(cont.firstChild);
+            }
+
+        for(var i = 0; i < songs; i++) {
+            var inp = document.createElement("input");
+            inp.type = "text";
+            inp.setAttribute("id", "input" + i);
+            inp.setAttribute("placeholder", "Song Name" + i);
+            cont.appendChild(inp); 
+        }
+            var albumID = document.createElement("input");
+            albumID.type = "number";
+            albumID.setAttribute("placeholder", "Album ID");
+            albumID.setAttribute("id", "albID");
+
+            cont.appendChild(albumID);
+
+            var btn = document.createElement("button");
+            btn.setAttribute("onclick", "setNames()");
+            btn.innerHTML = "Set Names";
+            cont.appendChild(btn);
+    }
+    
+
+    async function addAlbum() {
+
+        var price = document.getElementById("price").value;
+        var title = document.getElementById("title").value;
+        var artist = document.getElementById("artist").value;
+        var image = document.getElementById("image").value;
+        var song = document.getElementById("song").value;
+        var video = document.getElementById("video").value;
+        var art = document.getElementById("art").value;
+        var desc = document.getElementById("desc").value;
+
+        try{
+            await myContract.addAlbum(ethers.utils.parseUnits(price.toString(), 18), title, artist, image, song, video, art, desc);
+            alert("Album added succesfully!");
+        } catch(err) {
+            alert(err.data.message);
+        }
+    }
+
+    async function setNames() {
+        var arr = [];
+        var albID = document.getElementById("albID").value;
+        for(var i = 0; i < inputs; i++) {
+            arr.push(document.getElementById("input" + i).value);
+        }
+        try{
+            await myContract.setSongName(arr, albID);
+            alert("Names added succesfully!");
+        } catch(err) {
+            alert(err.data.message);
+        }
+    }
+
+    async function withdraw() {
+        try{
+            await myContract.withdrawAll();
+            alert("Withdrawn succesfully!");
+        } catch(err) {
+            alert(err.data.message);
+        }
+    }
+
+
+</script>
+
+</body>
+</html>
+
+

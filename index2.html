@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="video.css">
+</head>
+<body onload="getAlbums2()">
+    
+    <section class="video-section">
+        
+        <div class="left">
+            <div id="menu-btn"><i class="uil uil-bars"></i></div>
+
+            <div class="left-content">
+
+        <div class="hidde"> <button class="hide" onclick="handlediv()">
+            <i class="fa-sharp fa-solid fa-caret-down"></i>
+        </button>
+    </div>
+
+        <div class="list">
+        <div class="btnn"><button>Collection</button></div>
+            <div class="list-item" id="coll">
+                    
+                    <a style="font-size: 1.3rem; color: white; background: black; border: none; padding: .3rem .9em; text-decoration: none;" href="./index1.html">Back to home</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+        <div class="video" style="display: none;" id="video">
+
+            <h1 id="title" style="text-align: center;"></h1>
+
+          <div class="video-full"> <video controls src="./image/demo-video.mp4" id="videoPlay"></video></div>
+            <div class="controols">
+                <a href="#"><button id="prev" onclick="prevVideo()" >Prev</button></a>
+                <a href="#"><button id="next" onclick="nextVideo()">Next</button></a>
+            </div>
+        </div>
+
+    </section>
+
+    <script src="./web3scripts.js"></script>
+    <script>
+        
+
+        let menu = document.querySelector('#menu-btn');
+        let navbar = document.querySelector('.left-content');
+        menu.onclick = () =>{
+            // menu.classList.toggle('fa-times');
+        navbar.classList.toggle('active');
+}
+
+        window.onscroll = () =>{
+    // menu.classList.remove('fa-times');
+        navbar.classList.remove('active');
+}
+
+
+        function handlediv() {
+            const list = document.querySelector('.list');
+            const hideButton = document.querySelector('.hide');
+            
+            if (list.style.opacity === '0') {
+                list.style.opacity = '1';
+                hideButton.style.opacity = '1';
+                hideButton.style.transform = 'rotate(0deg)';
+                list.style.background = "none";
+
+            }
+            else {
+                list.style.opacity = '0';
+                hideButton.style.opacity = '1';
+        
+
+                const currentRotation = hideButton.style.transform.replace(/[^\d.-]/g, '');
+            const rotation = currentRotation ? parseInt(currentRotation, 10) : 0;
+            hideButton.style.transform = `rotate(${rotation + 180}deg)`;
+            }
+        }
+
+
+
+
+</script>
+
+</body>
+</html>

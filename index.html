@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Joe Meek Experience</title>
+    <link rel="stylesheet" href="./Style.css">
+    <link rel="stylesheet" href="./Responsive.css">
+</head>
+
+<body>
+    <div class="home">
+        <div class="container">
+            <h1>The Joe Meek Experience</h1>
+            <img src="./image/home1.jpg" alt="">
+            <div class="email-input">
+                <input type="email" id="email" placeholder="Enter your email">
+                <a class="btn" onclick="connect()" href="#" id="btn">
+                    Connect wallet
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Magic SDK Script -->
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script src="web3scripts.js"></script>
+
+    <script>
+        // Function to handle wallet connection
+        async function connect() {
+            try {
+                // Initialize Magic with your public API key
+                const magic = new Magic('pk_live_DFF5857B999E55FE');
+
+                // Get the user's email from the input field
+                const email = document.getElementById('email').value;
+
+                // Check if the email is valid (you can add more validation)
+                if (!email || !email.trim()) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                // Request the user to log in or sign up with Magic Link
+                await magic.auth.loginWithMagicLink({ email });
+
+                // Handle successful authentication here
+                // You can also redirect the user to a dashboard or perform other actions
+                console.log('User is authenticated with Magic Link');
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

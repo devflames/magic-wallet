@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./Style.css">
+    <link rel="stylesheet" href="./Responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body onload="getAlbums()">
+    <div class="layout">
+        <button class="hide" onclick="handlediv()">
+            <i class="fa-sharp fa-solid fa-caret-down"></i>
+        </button>
+        <button class="hide-left" onclick="handleleft()">
+            <i class="fa-sharp fa-solid fa-caret-down"></i>
+        </button>
+        <button class="collector" onclick="handlebtn()">Collections</button>
+        <button class=" collector1" onclick="handleleftbtn()">
+            <i class="fa-sharp fa-solid fa-caret-up"></i>
+        </button>
+
+        <button onclick="clickedbtn()" class="fas fa-bars" id="menu"></button>
+        <button onclick="clickedcross()" class="fas fa-times" id="menus"></button>
+
+        <div class="links" id="linkss">
+            <div class="collection">
+                <div class="button">
+                    <a class="btn" href="#">Collection</a>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="link" id="coll">
+                </div>
+            </div>
+
+        </div>
+        <div class="details">
+            <div class="top">
+                <div class="image">
+                    <img id="artistImage" src="./assets/overview.png" alt="">
+                    
+                </div>
+                <div class="content">
+                    <div class="button">
+                        <a href="./index2.html" class="btn">video</a>
+                        <a href="./index3.html" class="btn">Art</a>
+                    </div>
+                    
+                    <div class=" content-details">
+
+
+                        <h1 id="titl"></h1>
+                        <h2 id="artis"></h2>
+                       
+                        <div class=" content-details" id="singleSong">
+                            <div class="overview" style="margin-top: 10%;">
+                                <h1>Use this space to give informations</h1>
+                                <h1>We need to fill the space that stays blank untill an user selects an album</h1>
+                                <h1>This space can be used to present the way the project workss</h1>
+    
+                            </div>
+
+                       </div> 
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom">
+
+                <p id="descri"> </p>
+            </div>
+        </div>
+
+
+
+        <div class="player">
+            <div class="wrapper">
+                <div class="data">
+                    <div class="track-art"></div>
+                    <div class="data-details">
+                        <div class="track-name">Track Name</div>
+                        <div class="track-artist">Track Artist</div>
+                        <div class="now-playing">PLAYING x OF y</div>
+                    </div>
+                </div>
+
+                <div class="wrapper-box">
+                    <div class="slider_container" id="controller">
+                        <div class="current-time">00:00</div>
+                        <input type="range" min="1" max="100" value="0" class="seek_slider" onchange="seekTo()">
+                        <div class="total-duration">00:00</div>
+                    </div>
+
+                    <div class="slider_container">
+                        <i class="fa fa-volume-up" id="volume_icon"></i>
+                        <input type="range" min="1" max="100" value="99" class="volume_slider" onchange="setVolume()">
+                    </div>
+
+                    <div class="buttons">
+                        <!-- <div class="random-track" onclick="randomTrack()">
+                            <i class="fas fa-random fa-2x" title="random"></i>
+                        </div> -->
+                        <div class="prev-track" onclick="prevTrack()">
+                            <i class="fa fa-step-backward fa-2x"></i>
+                        </div>
+                        <div class="playpause-track" onclick="playpauseTrack()">
+                            <i class="fa fa-play-circle fa-5x" id="pause"></i>
+
+                        </div>
+                        <div class="next-track" onclick="nextTrack()">
+                            <i class="fa fa-step-forward fa-2x"></i>
+                        </div>
+                        <div class="repeat-track" onclick="repeatTrack()">
+                            <i class="fa fa-repeat fa-2x" title="repeat"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+    <!-- <script src="./script.js"></script> -->
+    <script src="./web3scripts.js"></script>
+    <script>
+        // playlist setting
+
+
+
+        let link = document.querySelector('.links')
+        let collect = document.querySelector('.collector')
+        let hide = document.querySelector('.hide')
+        let collectleft = document.querySelector('.collector1')
+        let hideleft = document.querySelector('.hide-left')
+        let leftdiv = document.querySelector('.details');
+        let menu = document.getElementById('menu')
+        let cross = document.getElementById('menus')
+
+
+        let now_playing = document.querySelector('.now-playing');
+        let track_art = document.querySelector('.track-art');
+        let track_name = document.querySelector('.track-name');
+        let track_artist = document.querySelector('.track-artist');
+
+        let playpause_btn = document.querySelector('.playpause-track');
+        let pause = document.querySelector('#pause')
+        let next_btn = document.querySelector('.next-track');
+        let prev_btn = document.querySelector('.prev-track');
+
+        let seek_slider = document.querySelector('.seek_slider');
+        let volume_slider = document.querySelector('.volume_slider');
+        let curr_time = document.querySelector('.current-time');
+        let total_duration = document.querySelector('.total-duration');
+        let wave = document.getElementById('wave');
+        let randomIcon = document.querySelector('.fa-random');
+        let curr_track = document.createElement('audio');
+        // linke value
+
+        //let track_index = 0;
+        let isRandom = false;
+        let updateTimer;
+
+        
+
+
+    </script>
+</body>
+
+</html>
